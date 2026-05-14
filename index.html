@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anqi Wang | Portfolio</title>
+    <style>
+        :root {
+            --bg: #000000;
+            --apple-blue: #007aff;
+            --text-main: #ffffff;
+            --text-dim: #d2d2d7;
+        }
+
+        /* 基础设置 */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        html { scroll-snap-type: y proximity; scroll-behavior: smooth; background: #000; }
+        body { background: var(--bg); color: var(--text-main); overflow-x: hidden; }
+
+        /* --- 极简导航栏 --- */
+        nav {
+            position: fixed; top: 0; width: 100%; height: 80px;
+            z-index: 1000; display: flex; justify-content: center; align-items: center;
+        }
+        .nav-links { display: flex; gap: 40px; }
+        .nav-links a { 
+            color: var(--text-main); text-decoration: none; font-size: 13px; 
+            font-weight: 400; transition: 0.4s; text-shadow: 0 2px 10px #000; 
+            letter-spacing: 1px;
+        }
+        .nav-links a:hover { transform: scale(1.15); color: var(--apple-blue); }
+
+        /* --- 全屏容器 --- */
+        .snap-section {
+            width: 100%; min-height: 100vh; scroll-snap-align: start; 
+            position: relative; display: flex; align-items: center; justify-content: center;
+            background: #000;
+        }
+
+        /* --- 无缝拼接容器（去黑边专用） --- */
+        .seamless {
+            min-height: auto !important; 
+            display: block !important;   
+        }
+
+        /* --- 封面图通用样式 --- */
+        .cover-box { width: 100%; height: 100vh; position: relative; overflow: hidden; }
+        .cover-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(1); display: block; }
+
+        /* --- 项目二封面图专属样式 --- */
+        #p2 .cover-box { height: auto; min-height: auto; display: block; }
+        #p2 .cover-img { width: 100%; height: auto; object-fit: unset; display: block; }
+
+        /* --- 长图详情通用样式 --- */
+        .detail-img { width: 100%; height: auto; display: block; filter: brightness(1); }
+
+        /* --- 项目一文字浮层：右下常驻 --- */
+        .permanent-overlay {
+            position: absolute; right: 6%; bottom: 10%;
+            max-width: 550px; text-align: right; z-index: 10;
+        }
+        .permanent-overlay h2 { font-size: 48px; font-weight: 600; margin-bottom: 15px; letter-spacing: 1px; }
+        .permanent-overlay p { font-size: 15px; color: var(--text-dim); line-height: 1.8; text-align: justify; }
+
+        /* --- 项目二文字浮层：左上常驻 + 黑色字体 --- */
+        #p2 .permanent-overlay {
+            right: auto; bottom: auto; left: 8%; top: 12%; 
+            text-align: left; max-width: 600px;
+        }
+        #p2 .permanent-overlay h2, #p2 .permanent-overlay p { color: #000000; }
+
+        /* --- 文字：左侧 3.5秒消失 --- */
+        .temp-left-overlay {
+            position: fixed; left: 8%; top: 50%; transform: translateY(-50%);
+            max-width: 450px; text-align: left; z-index: 100; opacity: 0; pointer-events: none;
+        }
+        .snap-section.active .temp-left-overlay { animation: textReveal3s 3.5s forwards; }
+        @keyframes textReveal3s {
+            0% { opacity: 0; transform: translate(-30px, -50%); }
+            10% { opacity: 1; transform: translate(0, -50%); }
+            85% { opacity: 1; transform: translate(0, -50%); }
+            100% { opacity: 0; transform: translate(20px, -50%); }
+        }
+        .temp-left-overlay h2 { font-size: 52px; font-weight: 600; margin-bottom: 20px; }
+        .temp-left-overlay p { font-size: 20px; color: var(--text-dim); }
+
+        /* --- 首页：土星粒子背景 --- */
+        #home { background: radial-gradient(circle at center, #050a15 0%, #000 100%); height: 100vh; overflow: hidden; }
+        #saturn-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; }
+        .welcome-overlay { position: absolute; bottom: 15%; left: 50%; transform: translateX(-50%); z-index: 50; text-align: center; pointer-events: none; }
+        .welcome-text { font-size: 14px; font-weight: 200; letter-spacing: 10px; color: #fff; text-transform: uppercase; }
+
+        /* --- Bento 布局通用 --- */
+        .bento-section { min-height: 100vh; background: #050505; padding: 120px 8%; display: flex; align-items: center; flex-direction: column; justify-content: center; }
+        .about-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 60px; max-width: 1400px; width: 100%; margin: 0 auto; }
+        .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1400px; width: 100%; margin: 0 auto; }
+        .about-photo { border-radius: 40px; overflow: hidden; border: 1px solid #222; max-height: 600px; }
+        .bento-card { 
+            background: rgba(255,255,255,0.03); padding: 35px; border-radius: 30px; 
+            border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;
+        }
+        .bento-card:hover { background: rgba(255,255,255,0.05); transform: translateY(-5px); }
+        .bento-card h4 { font-size: 12px; color: var(--apple-blue); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
+        .project-tag { display: inline-block; font-size: 11px; background: rgba(0, 122, 255, 0.15); color: var(--apple-blue); padding: 4px 10px; border-radius: 6px; margin-bottom: 12px; }
+        .bento-card h5 { font-size: 20px; margin-bottom: 15px; color: #fff; line-height: 1.4; }
+        .bento-card p { font-size: 14.5px; color: var(--text-dim); line-height: 1.7; text-align: justify; }
+        .highlight-text { color: #fff; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-links">
+            <a href="#home">首页</a>
+            <a href="#p1">机械臂背包</a>
+            <a href="#p2">智能辅助臂</a>
+            <a href="#about">关于我</a>
+            <a href="#interests">个人项目</a> </div>
+    </nav>
+
+    <section class="snap-section" id="home">
+        <canvas id="saturn-canvas"></canvas>
+        <div class="welcome-overlay"><div class="welcome-text">Welcome Your Arrival</div></div>
+    </section>
+
+    <section class="snap-section" id="p1">
+        <div class="cover-box">
+            <img src="0.jpg" class="cover-img" style="object-position: center 85%;">
+            <div class="permanent-overlay">
+                <h2>机械臂背包</h2>
+                <p>NEXT ARM 是一款新型多轴机械臂，致力于为多种任务提供辅助动力支持。采用高精度伺服电机，确保精准操控，末端配备多功能夹爪。折叠后尺寸紧凑，便于携带。</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="snap-section seamless"><img src="1.jpg" class="detail-img"><div class="temp-left-overlay"><h2>结构解析</h2><p>基于模块化逻辑的系统</p></div></section>
+    <section class="snap-section seamless"><img src="2.jpg" class="detail-img"><div class="temp-left-overlay"><h2>应用场景</h2><p>赋予人类超越生理局限的辅助操作体验</p></div></section>
+
+    <section class="snap-section seamless" id="p2">
+        <div class="cover-box">
+            <img src="7x.jpg" class="cover-img">
+            <div class="permanent-overlay">
+                <h2>桌面智能辅助机械臂</h2>
+                <p>你的桌面智能助手。致力于办公环境下的高精度反馈与工位协作系统，通过极简的工业语言定义未来桌面交互工具。</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="snap-section seamless">
+        <img src="5x.jpg" class="detail-img">
+        <div class="temp-left-overlay">
+            <h2>多功能设计</h2>
+
+        </div>
+    </section>
+
+    <section class="snap-section bento-section" id="about">
+        <div class="about-grid">
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div class="about-photo">
+                    <img src="my_photo.jpg" alt="个人照片" style="width:100%; height:100%; display:block; object-fit: cover;">
+                </div>
+                <div class="bento-card">
+                    <h4>身份荣誉</h4>
+                    <p>中共党员 | 学生会主席<br>校级优秀学术干部</p>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div>
+                    <h1 style="font-size: 56px; margin-bottom: 5px;">王安琪</h1>
+                    <p style="color: var(--apple-blue); letter-spacing: 5px; margin-bottom: 30px; font-weight: 300;">ANQI WANG | 设计 · 实践</p>
+                </div>
+
+                <div class="bento-card">
+                    <h4>教育背景</h4>
+                    <p><strong>浙江工业大学</strong> · 工业设计硕士 (2024-2027)<br><strong>福建理工大学</strong> · 建筑学本科 (2019-2024)</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="bento-card">
+                        <h4>机器人研究</h4>
+                        <div class="project-tag">设计师</div>
+                        <h5>刚柔耦合连续体机器人设计</h5>
+                        <p>独立完成刚、柔结构设计与制作、结构的测试与优化。聚焦场景完成控制代码开发与测试。</p>
+                    </div>
+                    <div class="bento-card">
+                        <h4>医疗康复</h4>
+                        <div class="project-tag">设计师</div>
+                        <h5>面部肌电康复设备设计</h5>
+                        <p>工作内容：病患用户、康复手段及竞品调研，综合考量完成需求分析、产品的功能、创新点定义。提出采用“镜像疗法”+肌肉电刺激的综合康复手段。完成面部康复设备外观、结构优化。经实验验证康复效率有所提升。</p>
+                    </div>
+                </div>
+
+                <div class="bento-card">
+                    <h4>可持续建筑</h4>
+                    <div class="project-tag">项目设计、建造与造价预算</div>
+                    <h5>循环建筑建造项目</h5>
+                    <p>循环建筑理念下的景观建筑设计与建造。落地于福建省宁德市南岩村。完成了从场地考察、设计、落地的全流程。实现为南岩村引流，带来经济增效，受到村民的一致好评。</p>
+                </div>
+
+                <div class="bento-card">
+                    <h4>学术成就</h4>
+                    <p>循环建筑论文一篇</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="snap-section bento-section" id="interests">
+        <div style="max-width: 1400px; width: 100%; text-align: left; margin-bottom: 30px;">
+            <h2 style="font-size: 42px; font-weight: 600;">个人商业探索</h2>
+            <p style="color: var(--apple-blue); letter-spacing: 2px; margin-top: 10px; font-weight: 300; text-transform: uppercase;">IP Incubation & Commercial Operations</p>
+        </div>
+        <div class="projects-grid">
+            <div class="bento-card">
+                <h4>自媒体运营与知识付费</h4>
+                <div class="project-tag">2024 - 2026 | 营收 8w+</div>
+                <h5>考研博主：小红书私域流量池搭建到商业变现</h5>
+                <p>
+                    <span class="highlight-text">流量侧：</span>通过对垂直客群及竞争对手的深度调研，精准锚定目标用户（不选择机构的考研群体）。利用 SEO 关键词布局与小红书推流机制（CES算法）实现精准引流。<br><br>
+                    <span class="highlight-text">留存侧：</span>对账号进行人格化定位，适度互动与人格内容策划进行信任搭建，用户留存率达 80%，并实现裂变增长。<br><br>
+                    <span class="highlight-text">转化侧：</span>独立完成“咨询-方案提供-成交”的转化全流程，并对教学方案实现产品化迭代实现知识结构化，实现高客单价与低投入的运营模式。
+                </p>
+            </div>
+            
+            <div class="bento-card">
+                <h4>IP 孵化与品牌塑造</h4>
+                <div class="project-tag">2024 - 2026 | 跨平台矩阵</div>
+                <h5>原创动漫 IP 孵化与跨平台运营</h5>
+                <p>
+                    <span class="highlight-text">流量侧：</span>通过对竞争对手的深度调研，定位群体（我与闺蜜），分享好友日常锚定目标用户需求。尝试多种内容机制探索客群偏好，实现流量的稳定增长，产出多条点赞破万的爆款内容。<br><br>
+                    <span class="highlight-text">留存侧：</span>增加与客群的互动，发布互动活动（如免费IP形象打造），深度提升粉丝粘性。<br><br>
+                    <span class="highlight-text">商业探索：</span>成功跑通相关产品的广告合作及周边定制等商业变现模式，完成 IP 从 0 到 1 的商业闭环。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer>&copy; 2026 Anqi Wang Portfolio</footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+                else entry.target.classList.remove('active');
+            });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.snap-section').forEach(s => observer.observe(s));
+
+        // 土星粒子系统
+        const canvas = document.getElementById('saturn-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: undefined, y: undefined, radius: 100 };
+
+        function initCanvas() {
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            createSaturn();
+        }
+        window.addEventListener('resize', initCanvas);
+        window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
+
+        class Particle {
+            constructor(targetX, targetY, color) {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.baseX = targetX; this.baseY = targetY;
+                this.color = color; this.size = Math.random() * 1.5 + 0.5;
+                this.density = (Math.random() * 20) + 10;
+            }
+            draw() {
+                ctx.fillStyle = this.color; ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+            }
+            update() {
+                let dx = mouse.x - this.x; let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < mouse.radius) {
+                    let force = (mouse.radius - distance) / mouse.radius;
+                    this.x -= (dx / distance) * force * this.density * 0.4;
+                    this.y -= (dy / distance) * force * this.density * 0.4;
+                } else {
+                    this.x -= (this.x - this.baseX) / 25;
+                    this.y -= (this.y - this.baseY) / 25;
+                }
+            }
+        }
+
+        function createSaturn() {
+            particles = [];
+            const centerX = canvas.width / 2; const centerY = canvas.height / 2;
+            const scale = Math.min(canvas.width, canvas.height) * 0.18; 
+            const rotate = (px, py, angle) => ({
+                x: px * Math.cos(angle) - py * Math.sin(angle),
+                y: px * Math.sin(angle) + py * Math.cos(angle)
+            });
+            for (let i = 0; i < 1500; i++) {
+                let phi = Math.acos(-1 + (2 * i) / 1500);
+                let theta = Math.sqrt(1500 * Math.PI) * phi;
+                let r = Math.random() * scale * 0.8; 
+                let p = rotate(r * Math.sin(phi) * Math.cos(theta), r * Math.sin(phi) * Math.sin(theta), 0.5);
+                particles.push(new Particle(centerX + p.x, centerY + p.y, '#ffffff'));
+            }
+            for (let i = 0; i < 2000; i++) {
+                let angle = Math.random() * Math.PI * 2;
+                let r = scale * 1.1 + Math.random() * (scale * 0.4); 
+                let p = rotate(r * Math.cos(angle), r * Math.sin(angle) * 0.12, 0.5);
+                particles.push(new Particle(centerX + p.x, centerY + p.y, i % 2 === 0 ? '#007aff' : '#86868b'));
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        initCanvas(); animate();
+    </script>
+</body>
+</html>
