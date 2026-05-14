@@ -12,12 +12,10 @@
             --text-dim: #d2d2d7;
         }
 
-        /* 基础设置 */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         html { scroll-snap-type: y proximity; scroll-behavior: smooth; background: #000; }
         body { background: var(--bg); color: var(--text-main); overflow-x: hidden; }
 
-        /* --- 极简导航栏 --- */
         nav {
             position: fixed; top: 0; width: 100%; height: 80px;
             z-index: 1000; display: flex; justify-content: center; align-items: center;
@@ -30,31 +28,25 @@
         }
         .nav-links a:hover { transform: scale(1.15); color: var(--apple-blue); }
 
-        /* --- 全屏容器 --- */
         .snap-section {
             width: 100%; min-height: 100vh; scroll-snap-align: start; 
             position: relative; display: flex; align-items: center; justify-content: center;
             background: #000;
         }
 
-        /* --- 无缝拼接容器（去黑边专用） --- */
         .seamless {
             min-height: auto !important; 
             display: block !important;   
         }
 
-        /* --- 封面图通用样式 --- */
         .cover-box { width: 100%; height: 100vh; position: relative; overflow: hidden; }
         .cover-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(1); display: block; }
 
-        /* --- 项目二封面图专属样式 --- */
         #p2 .cover-box { height: auto; min-height: auto; display: block; }
         #p2 .cover-img { width: 100%; height: auto; object-fit: unset; display: block; }
 
-        /* --- 长图详情通用样式 --- */
         .detail-img { width: 100%; height: auto; display: block; filter: brightness(1); }
 
-        /* --- 项目一文字浮层：右下常驻 --- */
         .permanent-overlay {
             position: absolute; right: 6%; bottom: 10%;
             max-width: 550px; text-align: right; z-index: 10;
@@ -62,14 +54,12 @@
         .permanent-overlay h2 { font-size: 48px; font-weight: 600; margin-bottom: 15px; letter-spacing: 1px; }
         .permanent-overlay p { font-size: 15px; color: var(--text-dim); line-height: 1.8; text-align: justify; }
 
-        /* --- 项目二文字浮层：左上常驻 + 黑色字体 --- */
         #p2 .permanent-overlay {
             right: auto; bottom: auto; left: 8%; top: 12%; 
             text-align: left; max-width: 600px;
         }
         #p2 .permanent-overlay h2, #p2 .permanent-overlay p { color: #000000; }
 
-        /* --- 文字：左侧 3.5秒消失 --- */
         .temp-left-overlay {
             position: fixed; left: 8%; top: 50%; transform: translateY(-50%);
             max-width: 450px; text-align: left; z-index: 100; opacity: 0; pointer-events: none;
@@ -84,13 +74,11 @@
         .temp-left-overlay h2 { font-size: 52px; font-weight: 600; margin-bottom: 20px; }
         .temp-left-overlay p { font-size: 20px; color: var(--text-dim); }
 
-        /* --- 首页：土星粒子背景 --- */
         #home { background: radial-gradient(circle at center, #050a15 0%, #000 100%); height: 100vh; overflow: hidden; }
         #saturn-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; }
         .welcome-overlay { position: absolute; bottom: 15%; left: 50%; transform: translateX(-50%); z-index: 50; text-align: center; pointer-events: none; }
         .welcome-text { font-size: 14px; font-weight: 200; letter-spacing: 10px; color: #fff; text-transform: uppercase; }
 
-        /* --- Bento 布局通用 --- */
         .bento-section { min-height: 100vh; background: #050505; padding: 120px 8%; display: flex; align-items: center; flex-direction: column; justify-content: center; }
         .about-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 60px; max-width: 1400px; width: 100%; margin: 0 auto; }
         .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1400px; width: 100%; margin: 0 auto; }
@@ -115,7 +103,8 @@
             <a href="#p1">机械臂背包</a>
             <a href="#p2">智能辅助臂</a>
             <a href="#about">关于我</a>
-            <a href="#interests">个人项目</a> </div>
+            <a href="#interests">个人项目</a>
+        </div>
     </nav>
 
     <section class="snap-section" id="home">
@@ -125,7 +114,7 @@
 
     <section class="snap-section" id="p1">
         <div class="cover-box">
-            <img src="0.jpg" class="cover-img" style="object-position: center 85%;">
+            <img src="https://github.com/waanqi/lew/releases/download/asset/0.jpg" class="cover-img" style="object-position: center 85%;">
             <div class="permanent-overlay">
                 <h2>机械臂背包</h2>
                 <p>NEXT ARM 是一款新型多轴机械臂，致力于为多种任务提供辅助动力支持。采用高精度伺服电机，确保精准操控，末端配备多功能夹爪。折叠后尺寸紧凑，便于携带。</p>
@@ -133,12 +122,12 @@
         </div>
     </section>
     
-    <section class="snap-section seamless"><img src="1.jpg" class="detail-img"><div class="temp-left-overlay"><h2>结构解析</h2><p>基于模块化逻辑的系统</p></div></section>
-    <section class="snap-section seamless"><img src="2.jpg" class="detail-img"><div class="temp-left-overlay"><h2>应用场景</h2><p>赋予人类超越生理局限的辅助操作体验</p></div></section>
+    <section class="snap-section seamless"><img src="https://github.com/waanqi/lew/releases/download/asset/1.jpg" class="detail-img"><div class="temp-left-overlay"><h2>结构解析</h2><p>基于模块化逻辑的系统</p></div></section>
+    <section class="snap-section seamless"><img src="https://github.com/waanqi/lew/releases/download/asset/2.jpg" class="detail-img"><div class="temp-left-overlay"><h2>应用场景</h2><p>赋予人类超越生理局限的辅助操作体验</p></div></section>
 
     <section class="snap-section seamless" id="p2">
         <div class="cover-box">
-            <img src="7x.jpg" class="cover-img">
+            <img src="https://github.com/waanqi/lew/releases/download/asset/7x.jpg" class="cover-img">
             <div class="permanent-overlay">
                 <h2>桌面智能辅助机械臂</h2>
                 <p>你的桌面智能助手。致力于办公环境下的高精度反馈与工位协作系统，通过极简的工业语言定义未来桌面交互工具。</p>
@@ -147,10 +136,9 @@
     </section>
 
     <section class="snap-section seamless">
-        <img src="5x.jpg" class="detail-img">
+        <img src="https://github.com/waanqi/lew/releases/download/asset/5x.jpg" class="detail-img">
         <div class="temp-left-overlay">
-            <h2>多功能设计</h2>
-
+            <h2>设计研究</h2>
         </div>
     </section>
 
@@ -158,7 +146,7 @@
         <div class="about-grid">
             <div style="display: flex; flex-direction: column; gap: 20px;">
                 <div class="about-photo">
-                    <img src="my_photo.jpg" alt="个人照片" style="width:100%; height:100%; display:block; object-fit: cover;">
+                    <img src="https://github.com/waanqi/lew/releases/download/asset/my_photo.jpg" alt="个人照片" style="width:100%; height:100%; display:block; object-fit: cover;">
                 </div>
                 <div class="bento-card">
                     <h4>身份荣誉</h4>
@@ -248,7 +236,6 @@
         }, { threshold: 0.15 });
         document.querySelectorAll('.snap-section').forEach(s => observer.observe(s));
 
-        // 土星粒子系统
         const canvas = document.getElementById('saturn-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
